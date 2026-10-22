@@ -3,9 +3,9 @@ using VisionAutomationFramework;
 using VisionAutomationFramework.Browsers;
 using VisionAutomationFramework.Extensions;
 
-namespace FirstVafTest
+namespace FirstVafTest.Tests
 {
-    public class Tests
+    public class FirstTests
     {
         [Test]
         public void OpensThePracticeForm()
