@@ -1,0 +1,38 @@
+name: Tests
+
+# Runs the tutorial project against the live practice pages on every push and pull request, and once
+# a week, so a change on the site or in a new Chrome shows up even when nothing changes here.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    env:
+      # A desktop-sized window: without one headless Chrome is about 800 px wide.
+      VAF_ChromeArguments: --headless=new --window-size=1920,1080
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Test
+        run: dotnet test --logger trx --results-directory TestResults
+
+      - name: Upload results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            TestResults/
+            FirstVafTest/bin/Debug/net10.0/*.png
+            FirstVafTest/bin/Debug/net10.0/*.html
