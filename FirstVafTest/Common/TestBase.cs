@@ -1,4 +1,6 @@
 using NUnit.Framework;
+using NUnit.Framework.Interfaces;
+using VisionAutomationFramework;
 
 namespace FirstVafTest.Common
 {
@@ -11,6 +13,25 @@ namespace FirstVafTest.Common
         public void StartTheBrowser() => SharedContext.LetsStartTheBrowser();
 
         [TearDown]
-        public void CloseTheBrowser() => SharedContext.LetsCloseTheBrowser();
+        public void ReportAndClose()
+        {
+            try
+            {
+                // A failed test leaves a screenshot of the page as it was, attached to the result
+                if (TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Failed)
+                {
+                    SharedContext.Browser?.LetsTakeScreenshot();
+                }
+
+                // Every test leaves an HTML report of what VAF did, step by step
+                Testing.ConvertLogToHtml(TestContext.CurrentContext.WorkDirectory,
+                                         TestContext.CurrentContext.Test.Name);
+            }
+            finally
+            {
+                // Close the browser even when the report cannot be written
+                SharedContext.LetsCloseTheBrowser();
+            }
+        }
     }
 }
