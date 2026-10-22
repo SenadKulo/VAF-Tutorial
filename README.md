@@ -13,11 +13,12 @@ Each lesson ends in a tag. If your code does not work, compare it with the tag o
 |---|---|---|
 | 1 — [Your first test](https://www.visionautomationframework.com/quick-start-guide) | [`lesson-1`](https://github.com/SenadKulo/VAF-Tutorial/tree/lesson-1) | The Quick start: one test that opens the sign-up form and checks the title |
 | 2 — [Map your first page](https://www.visionautomationframework.com/tutorials/map-your-first-page) | [`lesson-2`](https://github.com/SenadKulo/VAF-Tutorial/tree/lesson-2) | `PageObjects` (`AppPage`, `FormsPage`) and `Tests`; a test that fills in the form and checks what the server received |
+| 3 — [Good and bad locators](https://www.visionautomationframework.com/tutorials/good-and-bad-locators) | [`lesson-3`](https://github.com/SenadKulo/VAF-Tutorial/tree/lesson-3) | `MappingPage` (stable) and `MappingPageFragile` (fragile) for one screen; tests before and after a redesign |
 
 ```
 git clone https://github.com/SenadKulo/VAF-Tutorial.git
 cd VAF-Tutorial
-git checkout lesson-2
+git checkout lesson-3
 ```
 
 ## Run
