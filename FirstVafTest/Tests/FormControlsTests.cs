@@ -1,30 +1,17 @@
 using System.Collections.Generic;
+using FirstVafTest.Common;
 using FirstVafTest.PageObjects;
+using FirstVafTest.SharedSteps;
 using NUnit.Framework;
 using VisionAutomationFramework;
-using VisionAutomationFramework.Actions;
-using VisionAutomationFramework.Browsers;
 using VisionAutomationFramework.Extensions;
 
 namespace FirstVafTest.Tests
 {
-    public class FormControlsTests
+    public class FormControlsTests : TestBase
     {
-        private BrowserActions browser = null!;     // set in SetUp, before every test
-        private PageActions<AppPage> app = null!;
-
-        // Every test starts on the same page, so open it once here instead of in every test
         [SetUp]
-        public void OpenTheForm()
-        {
-            browser = Testing.On<Chrome>();
-            app = browser.LetsNavigateTo("https://www.visionautomationframework.com/practice/forms")
-                .Should().DisplayPage<AppPage>().That;
-        }
-
-        // Runs after every test, also when it fails
-        [TearDown]
-        public void CloseTheBrowser() => browser.Scope.Driver.Quit();
+        public void Open() => FormsSteps.LetsOpenTheForm();
 
         [Test]
         public void CountryListOffersEveryCountry()
@@ -35,7 +22,7 @@ namespace FirstVafTest.Tests
                 "United Kingdom", "United States"
             };
 
-            app.Should().HaveSection<FormsPage.Registration>()
+            SharedContext.App.Should().HaveSection<FormsPage.Registration>()
                 .That.Should().HaveElement<FormsPage.Registration.Country>()
                     .That.AsSelectBox().Should().HaveOptions(countries)
                         .BeSelected("Choose a country")
@@ -48,7 +35,7 @@ namespace FirstVafTest.Tests
         [Test]
         public void OnlyOnePlanIsSelected()
         {
-            app.Should().HaveSection<FormsPage.Registration>()
+            SharedContext.App.Should().HaveSection<FormsPage.Registration>()
                 .That.Should().HaveElement<FormsPage.Registration.PlanFree>()
                     .That.AsRadioButton().Should().BeSelected()
                 .AndAlso().Should().HaveElement<FormsPage.Registration.PlanTeam>()
@@ -62,7 +49,7 @@ namespace FirstVafTest.Tests
         [Test]
         public void SubmitIsEnabledOnceTheTermsAreAccepted()
         {
-            app.Should().HaveSection<FormsPage.Registration>()
+            SharedContext.App.Should().HaveSection<FormsPage.Registration>()
                 .That.Should().HaveElement<FormsPage.Registration.Submit>()
                     .That.AsButton().Should().BeDisabled()
                 .AndAlso().Should().HaveElement<FormsPage.Registration.AcceptTerms>()
@@ -80,7 +67,7 @@ namespace FirstVafTest.Tests
         public void CheckFailsWhenTheButtonIsDisabled()
         {
             Assert.Throws<VafAssertionException>(() =>
-                app.Should().HaveSection<FormsPage.Registration>()
+                SharedContext.App.Should().HaveSection<FormsPage.Registration>()
                     .That.Should().HaveElement<FormsPage.Registration.Submit>()
                         .That.AsButton().Should().BeEnabled());
         }
@@ -88,13 +75,13 @@ namespace FirstVafTest.Tests
         [Test]
         public void EmptyFormShowsAnErrorPerField()
         {
-            app.Should().HaveSection<FormsPage.Registration>()
+            SharedContext.App.Should().HaveSection<FormsPage.Registration>()
                 .That.Should().HaveElement<FormsPage.Registration.AcceptTerms>()
                     .That.AsCheckBox().LetsClick()
                 .AndAlso().Should().HaveElement<FormsPage.Registration.Submit>()
                     .That.AsButton().LetsClick();
 
-            app.Should().HaveSection<FormsPage.Registration>()
+            SharedContext.App.Should().HaveSection<FormsPage.Registration>()
                 .That.Should().HaveElement<FormsPage.Registration.ErrorCount>()
                     .That.AsCounterField().Should().HaveValue("4")
                 .AndAlso().Should().HaveElement<FormsPage.Registration.FullNameError>()

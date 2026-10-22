@@ -1,54 +1,32 @@
-using FirstVafTest.PageObjects;
+using FirstVafTest.Common;
+using FirstVafTest.SharedSteps;
 using NUnit.Framework;
-using VisionAutomationFramework;
-using VisionAutomationFramework.Browsers;
-using VisionAutomationFramework.Extensions;
 
 namespace FirstVafTest.Tests
 {
-    public class RegistrationTests
+    // The test of lesson 2, written with shared steps: it reads as what the user does
+    public class RegistrationTests : TestBase
     {
-        [Test]
-        public void ValidRegistrationIsShownBack()
+        // TestBase has started the browser; this opens the form and fills SharedContext.App
+        [SetUp]
+        public void Open() => FormsSteps.LetsOpenTheForm();
+
+        [TestCase("Free")]
+        [TestCase("Team")]
+        [TestCase("Enterprise")]
+        public void ValidRegistrationIsShownBack(string plan)
         {
-            var browser = Testing.On<Chrome>();
+            FormsSteps.LetsRegister("Ada Lovelace", "ada@example.com", "analytical", "Croatia", plan);
+            FormsSteps.LetsCheckTheResult("Ada Lovelace", "ada@example.com", "Croatia", plan);
+        }
 
-            try
-            {
-                // The page context: every section is found from here
-                var app = browser.LetsNavigateTo("https://www.visionautomationframework.com/practice/forms")
-                    .Should().DisplayPage<AppPage>().That;
+        [TestCase("ada.example.com", "This does not look like an email address.")]
+        [TestCase("", "Please enter your email address.")]
+        public void WrongEmailIsReported(string email, string error)
+        {
+            FormsSteps.LetsRegister("Ada Lovelace", email, "analytical", "Croatia");
 
-                // Fill in the form and send it
-                app.Should().HaveSection<FormsPage.Registration>()
-                    .That.Should().HaveElement<FormsPage.Registration.FullName>()
-                        .That.AsTextInputField().LetsInsert("Ada Lovelace")
-                    .AndAlso().Should().HaveElement<FormsPage.Registration.Email>()
-                        .That.AsTextInputField().LetsInsert("ada@example.com")
-                    .AndAlso().Should().HaveElement<FormsPage.Registration.Password>()
-                        .That.AsTextInputField().LetsInsert("analytical")
-                    .AndAlso().Should().HaveElement<FormsPage.Registration.Country>()
-                        .That.AsSelectBox().LetsSelect("Croatia")
-                    .AndAlso().Should().HaveElement<FormsPage.Registration.AcceptTerms>()
-                        .That.AsCheckBox().LetsClick()
-                    .AndAlso().Should().HaveElement<FormsPage.Registration.Submit>()
-                        .That.AsButton().LetsClick();
-
-                // Check what the server received
-                app.Should().HaveSection<FormsPage.Result>()
-                    .That.Should().HaveElement<FormsPage.Result.Title>()
-                        .That.AsLabelText().Should().HaveValue("Registration received")
-                    .AndAlso().Should().HaveElement<FormsPage.Result.FullName>()
-                        .That.AsLabelText().Should().HaveValue("Ada Lovelace")
-                    .AndAlso().Should().HaveElement<FormsPage.Result.Email>()
-                        .That.AsLabelText().Should().HaveValue("ada@example.com")
-                    .AndAlso().Should().HaveElement<FormsPage.Result.Country>()
-                        .That.AsLabelText().Should().HaveValue("Croatia");
-            }
-            finally
-            {
-                browser.Scope.Driver.Quit();
-            }
+            Assert.That(FormsSteps.LetsReadTheEmailError(), Is.EqualTo(error));
         }
     }
 }
