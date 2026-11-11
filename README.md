@@ -11,7 +11,7 @@ Each lesson ends in a tag. If your code does not work, compare it with the tag o
 
 | Lesson | Tag | What the project has at the end of it |
 |---|---|---|
-| 1 — [Your first test](https://www.visionautomationframework.com/quick-start-guide) | [`lesson-1`](https://github.com/SenadKulo/VAF-Tutorial/tree/lesson-1) | The Quick start: one test that opens the sign-up form and checks the title |
+| 1 — [Your first test](https://www.visionautomationframework.com/tutorials/your-first-test) | [`lesson-1`](https://github.com/SenadKulo/VAF-Tutorial/tree/lesson-1) | One test that opens the sign-up form and checks the title |
 | 2 — [Map your first page](https://www.visionautomationframework.com/tutorials/map-your-first-page) | [`lesson-2`](https://github.com/SenadKulo/VAF-Tutorial/tree/lesson-2) | `PageObjects` (`AppPage`, `FormsPage`) and `Tests`; a test that fills in the form and checks what the server received |
 | 3 — [Good and bad locators](https://www.visionautomationframework.com/tutorials/good-and-bad-locators) | [`lesson-3`](https://github.com/SenadKulo/VAF-Tutorial/tree/lesson-3) | `MappingPage` (stable) and `MappingPageFragile` (fragile) for one screen; tests before and after a redesign |
 | 4 — [More controls](https://www.visionautomationframework.com/tutorials/more-controls) | [`lesson-4`](https://github.com/SenadKulo/VAF-Tutorial/tree/lesson-4) | The whole sign-up form, `DatePickersPage`, `UploadPage`; drop-down, radio, check box, date picker and upload tests, `SetUp` / `TearDown`, a check that must fail |
